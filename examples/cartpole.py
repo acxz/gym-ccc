@@ -2,7 +2,9 @@ import gym
 import numpy as np
 
 def main():
-    env = gym.make('gym_continuous_classic_control.envs:ContinuousCartPole-v0')
+    kwargs = {'gravity': 10}
+    env = gym.make('gym_continuous_classic_control.envs:ContinuousCartPole-v0',
+            **kwargs)
 
     obs = env.reset()
     while True:

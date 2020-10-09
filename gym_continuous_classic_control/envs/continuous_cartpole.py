@@ -33,8 +33,16 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
         Episode length is greater than 1000, unless specified.
     """
 
-    def __init__(self):
+    def __init__(self, gravity=9.8, masscart=1.0, masspole=0.1, length=0.5, tau=0.02,
+            kinematics_integrator='euler'):
         super().__init__()
+
+        self.gravity = gravity
+        self.masscart = masscart
+        self.masspole = masspole
+        self.length = length
+        self.tau = tau
+        self.kinematics_integrator = kinematics_integrator
 
         action_high = np.array([np.finfo(np.float32).max], dtype=np.float32)
 
@@ -76,8 +84,8 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
         return np.array(self.state), 0, False, {}
 
 class ContinuousCartPoleEnv(NonNormalizedContinuousCartPoleEnv):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def step(self, action):
         obs, reward, done, info = super().step(action)
