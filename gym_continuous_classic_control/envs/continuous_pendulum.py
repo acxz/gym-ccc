@@ -3,7 +3,7 @@ from gym.envs import classic_control
 import numpy as np
 
 
-class ContinuousPendulumEnv(classic_control.PendulumEnv):
+class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
     def __init__(self, g=10.0):
         self.dt = .05
         self.g = g
@@ -44,7 +44,7 @@ class ContinuousPendulumEnv(classic_control.PendulumEnv):
         self.state = np.array([newth, newthdot])
         return self.state, 0, False, {}
 
-class NormalizedContinuousPendulumEnv(ContinuousPendulumEnv):
+class ContinuousPendulumEnv(NonNormalizedContinuousPendulumEnv):
     def __init__(self, g=10.0):
         super().__init__(g)
 
