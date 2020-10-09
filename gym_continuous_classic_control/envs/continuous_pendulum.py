@@ -45,8 +45,8 @@ class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
         return self.state, 0, False, {}
 
 class ContinuousPendulumEnv(NonNormalizedContinuousPendulumEnv):
-    def __init__(self, g=10.0, m=1, l=1, b=1, dt=0.05):
-        super().__init__(g)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def step(self, u):
         obs, reward, done, info = super().step(u)
