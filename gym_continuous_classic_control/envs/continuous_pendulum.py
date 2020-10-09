@@ -4,12 +4,12 @@ import numpy as np
 
 
 class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
-    def __init__(self, g=10.0):
-        self.dt = .05
+    def __init__(self, g=10.0, m=1, l=1, b=1, dt=0.05):
+        self.dt = dt
         self.g = g
-        self.m = 1.
-        self.l = 1.
-        self.b = 1.
+        self.m = m
+        self.l = l
+        self.b = b
         self.viewer = None
 
         self.action_space = spaces.Box(
@@ -45,7 +45,7 @@ class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
         return self.state, 0, False, {}
 
 class ContinuousPendulumEnv(NonNormalizedContinuousPendulumEnv):
-    def __init__(self, g=10.0):
+    def __init__(self, g=10.0, m=1, l=1, b=1, dt=0.05):
         super().__init__(g)
 
     def step(self, u):
