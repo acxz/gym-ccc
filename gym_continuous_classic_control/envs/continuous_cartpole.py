@@ -72,6 +72,11 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
 
         return np.array(self.state), 0, False, {}
 
+    def reset(self):
+        self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
+        return np.array(self.state)
+
+
 class ContinuousCartPoleEnv(NonNormalizedContinuousCartPoleEnv):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -81,6 +86,10 @@ class ContinuousCartPoleEnv(NonNormalizedContinuousCartPoleEnv):
         info['state'] = np.array(self.state)
 
         return self._get_obs(), reward, done, info
+
+    def reset(self):
+        self.state = super().reset()
+        return self._get_obs()
 
     def _get_obs(self):
         x, x_dot, theta, theta_dot = self.state

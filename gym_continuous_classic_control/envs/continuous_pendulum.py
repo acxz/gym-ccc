@@ -44,6 +44,11 @@ class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
         self.state = np.array([newth, newthdot])
         return self.state, 0, False, {}
 
+    def reset(self):
+        high = np.array([np.pi, 1])
+        self.state = self.np_random.uniform(low=-high, high=high)
+        return self.state
+
 class ContinuousPendulumEnv(NonNormalizedContinuousPendulumEnv):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -53,6 +58,10 @@ class ContinuousPendulumEnv(NonNormalizedContinuousPendulumEnv):
         info['state'] = self.state
 
         return self._get_obs(), reward, done, info
+
+    def reset(self):
+        self.state = super().reset()
+        return self._get_obs()
 
 def angle_normalize(x):
     return (((x+np.pi) % (2*np.pi)) - np.pi)
