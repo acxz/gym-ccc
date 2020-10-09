@@ -44,5 +44,15 @@ class ContinuousPendulumEnv(classic_control.PendulumEnv):
         self.state = np.array([newth, newthdot])
         return self.state, 0, False, {}
 
+class NormalizedContinuousPendulumEnv(ContinuousPendulumEnv):
+    def __init__(self, g=10.0):
+        super().__init__(g)
+
+    def step(self, u):
+        obs, reward, done, info = super().step(u)
+        info['state'] = self.state
+
+        return self._get_obs(), reward, done, info
+
 def angle_normalize(x):
     return (((x+np.pi) % (2*np.pi)) - np.pi)
