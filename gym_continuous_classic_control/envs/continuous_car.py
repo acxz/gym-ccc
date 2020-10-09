@@ -16,7 +16,7 @@ class NonNormalizedContinuousCarEnv(gym.Env):
         2       Heading Angle             -Pi rad (-180 deg)      Pi rad (180 deg)
         3       Forward Velocity          -Inf                    Inf
     Actions:
-        Type: Box(1)
+        Type: Box(2)
         Num   Action                      Min                     Max
         0     Acceleraton                 -Inf                    Inf
         1     Steering Rate               -Inf                    Inf
