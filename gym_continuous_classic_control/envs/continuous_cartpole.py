@@ -11,9 +11,6 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
         a frictionless track. The pendulum starts upright, and the goal is to
         prevent it from falling over by increasing and reducing the cart's
         velocity.
-    Source:
-        This environment corresponds to the version of the cart-pole problem
-        described by Barto, Sutton, and Anderson
     Observation:
         Type: Box(4)
         Num     Observation               Min                     Max
@@ -29,20 +26,17 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
         None
     Starting State:
         All observations are assigned a uniform random value in [-0.05..0.05]
-    Episode Termination:
-        Episode length is greater than 1000, unless specified.
     """
 
-    def __init__(self, gravity=9.8, masscart=1.0, masspole=0.1, length=0.5, tau=0.02,
-            kinematics_integrator='euler'):
+    def __init__(self, gravity=9.8, masscart=1.0, masspole=0.1, polelength=1.0, tau=0.02):
         super().__init__()
 
         self.gravity = gravity
         self.masscart = masscart
         self.masspole = masspole
-        self.length = length
+        self.polelength = polelength
+        self.length = self.polelength/2 # For rendering purposes
         self.tau = tau
-        self.kinematics_integrator = kinematics_integrator
 
         action_high = np.array([np.finfo(np.float32).max], dtype=np.float32)
 
@@ -61,22 +55,17 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
         costheta = math.cos(theta)
         sintheta = math.sin(theta)
 
-        # For the interested reader:
-        # https://coneural.org/florian/papers/05_cart_pole.pdf
-        temp = (force + self.polemass_length * theta_dot ** 2 * sintheta) / self.total_mass
-        thetaacc = (self.gravity * sintheta - costheta * temp) / (self.length * (4.0 / 3.0 - self.masspole * costheta ** 2 / self.total_mass))
-        xacc = temp - self.polemass_length * thetaacc * costheta / self.total_mass
+        temp = self.masscart + self.masspole * sintheta ** 2
+        xacc = 1/temp * (self.masspole * sintheta * (self.polelength * theta_dot**2 \
+            + self.gravity * costheta) + force)
+        thetaacc = 1/(self.polelength * temp) * (- self.masspole * self.polelength * \
+                theta_dot**2 * costheta * sintheta - (self.masscart + \
+                    self.masspole) * self.gravity * sintheta - force * costheta)
 
-        if self.kinematics_integrator == 'euler':
-            x = x + self.tau * x_dot
-            x_dot = x_dot + self.tau * xacc
-            theta = theta + self.tau * theta_dot
-            theta_dot = theta_dot + self.tau * thetaacc
-        else:  # semi-implicit euler
-            x_dot = x_dot + self.tau * xacc
-            x = x + self.tau * x_dot
-            theta_dot = theta_dot + self.tau * thetaacc
-            theta = theta + self.tau * theta_dot
+        x = x + self.tau * x_dot
+        x_dot = x_dot + self.tau * xacc
+        theta = theta + self.tau * theta_dot
+        theta_dot = theta_dot + self.tau * thetaacc
 
         theta = angle_normalize(theta)
         self.state = (x, x_dot, theta, theta_dot)
