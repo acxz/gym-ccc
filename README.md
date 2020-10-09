@@ -35,4 +35,5 @@ pip install gym-continuous-classic-control
 
 ## Usage
 
-TODO
+As you would any other gym environment. See the examples directory for some
+example code of creating and stepping through the gym env.
