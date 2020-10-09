@@ -36,7 +36,27 @@ register(
     kwargs={},
 )
 
+register(
+    id='NonNormalizedContinuousCar-v0',
+    entry_point='gym_continuous_classic_control.envs:NonNormalizedContinuousCarEnv',
+    reward_threshold=None,
+    nondeterministic=False,
+    max_episode_steps=None,
+    kwargs={},
+)
+
+register(
+    id='ContinuousCar-v0',
+    entry_point='gym_continuous_classic_control.envs:ContinuousCarEnv',
+    reward_threshold=None,
+    nondeterministic=False,
+    max_episode_steps=None,
+    kwargs={},
+)
+
 from gym_continuous_classic_control.envs.continuous_pendulum import NonNormalizedContinuousPendulumEnv
 from gym_continuous_classic_control.envs.continuous_pendulum import ContinuousPendulumEnv
 from gym_continuous_classic_control.envs.continuous_cartpole import NonNormalizedContinuousCartPoleEnv
 from gym_continuous_classic_control.envs.continuous_cartpole import ContinuousCartPoleEnv
+from gym_continuous_classic_control.envs.continuous_car import NonNormalizedContinuousCarEnv
+from gym_continuous_classic_control.envs.continuous_car import ContinuousCarEnv
