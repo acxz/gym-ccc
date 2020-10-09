@@ -7,6 +7,7 @@ def main():
     obs = env.reset()
     while True:
         obs, reward, done, info = env.step(np.array([0]))
+        print("\r" + str(info['state']), end="")
         env.render('human')
 
 if __name__ == "__main__":

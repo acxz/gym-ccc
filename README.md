@@ -23,7 +23,9 @@ reward shape and implement your own.
 
 The main purpose of this library is to provide premade gym environments
 implementing dynamics of traditional control problems that incorporate the
-non-normalized states of the system.
+non-normalized states of the system, whether that is through not normalizing the
+observation output of `step` or by adding the state information in the output
+`info` dict of `step`.
 
 ## Installation
 
