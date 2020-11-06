@@ -6,7 +6,6 @@ from gym.utils import seeding
 import numpy as np
 
 
-# pylint: disable=abstract-method
 class NonNormContCarEnv(gym.Env):
     """
     Continuous car that outpus the state as the observation.
@@ -81,6 +80,10 @@ class NonNormContCarEnv(gym.Env):
         """Reset state to random value."""
         self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
         return self.state
+
+    def render(self, mode='human'):
+        """Show the current state."""
+        print(self.state)
 
 
 class ContCarEnv(NonNormContCarEnv):
