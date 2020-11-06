@@ -25,12 +25,12 @@ The main purpose of this library is to provide premade gym environments
 implementing dynamics of traditional control problems that incorporate the
 non-normalized states of the system, whether that is through not normalizing the
 observation output of `step` or by adding the state information in the output
-`info` dict of `step`.
+`info` dict of `step` (`info['state']`).
 
 ## Installation
 
 ```bash
-pip install gym-continuous-classic-control
+pip install .
 ```
 
 ## Usage
