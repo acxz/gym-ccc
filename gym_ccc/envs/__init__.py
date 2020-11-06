@@ -27,7 +27,6 @@ register(
     kwargs={},
 )
 
-
 register(
     id='ContCartPole-v0',
     entry_point='gym_ccc.envs:ContCartPoleEnv',
@@ -46,6 +45,14 @@ register(
     kwargs={},
 )
 
+register(
+    id='NonNormContMultirotorPole-v0',
+    entry_point='gym_ccc.envs:NonNormContMultirotorEnv',
+    reward_threshold=None,
+    nondeterministic=False,
+    max_episode_steps=None,
+    kwargs={},
+)
 
 register(
     id='ContPendulum-v0',
