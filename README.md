@@ -19,13 +19,15 @@ environments to ensure the same dynamics are used.
 If you want to use a different kind of normalization then feel free to extend
 the original gym environments and output a normalized observation of your own
 choosing. Similarly, you can extend the gym environments to disregard the given
-reward shape and implement your own.
+reward shape and implement your own. See gym wrappers for how to do this. 
+(https://alexandervandekleut.github.io/gym-wrappers/)
 
-The main purpose of this library is to provide premade gym environments
-implementing dynamics of traditional control problems that incorporate the
-non-normalized states of the system, whether that is through not normalizing the
-observation output of `step` or by adding the state information in the output
-`info` dict of `step` (`info['state']`).
+The main highlights are:
+1) non normalized observation corresponding directly to the dynamical state
+2) normalized observation with dynamical state captured in `info['state']`
+3) action spaces are continuous
+4) system parameters (mass, length, etc.) can be specificed
+5) reset function (to specify initial conditions) can be specified.
 
 ## Installation
 
