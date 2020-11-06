@@ -6,7 +6,7 @@ import numpy as np
 
 
 # pylint: disable=too-many-instance-attributes
-class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
+class NonNormContPendulumEnv(classic_control.PendulumEnv):
     """Observation output is the non normalized state of the system."""
 
     # pylint: disable=too-many-arguments
@@ -61,7 +61,7 @@ class NonNormalizedContinuousPendulumEnv(classic_control.PendulumEnv):
         return self.state
 
 
-class ContinuousPendulumEnv(NonNormalizedContinuousPendulumEnv):
+class ContPendulumEnv(NonNormContPendulumEnv):
     """Observation: normalized state. Info contains the state."""
 
     def __init__(self, **kwargs):

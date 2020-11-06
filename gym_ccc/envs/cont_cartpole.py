@@ -8,7 +8,7 @@ import numpy as np
 
 
 # pylint: disable=too-many-instance-attributes
-class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
+class NonNormContCartPoleEnv(classic_control.CartPoleEnv):
     """
     Continuous cartpole that outputs the state as the observation.
 
@@ -96,7 +96,7 @@ class NonNormalizedContinuousCartPoleEnv(classic_control.CartPoleEnv):
         return np.array(self.state)
 
 
-class ContinuousCartPoleEnv(NonNormalizedContinuousCartPoleEnv):
+class ContCartPoleEnv(NonNormContCartPoleEnv):
     """Continuous cartpole with normalized observation and state in info."""
 
     def __init__(self, **kwargs):

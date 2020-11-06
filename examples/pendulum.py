@@ -6,8 +6,8 @@ import numpy as np
 
 def main():
     """Propagates pendulum dynamics."""
-    kwargs = {'g': 9.8, 'm': 1, 'l': 1, 'b': 1, 'dt': 0.05}
-    env = gym.make('gym_continuous_classic_control.envs:ContinuousPendulum-v0',
+    kwargs = {'gravity': 9.8, 'mass': 1, 'length': 1, 'damping': 1, 'dt': 0.05}
+    env = gym.make('gym_ccc.envs:ContPendulum-v0',
                    **kwargs)
 
     env.reset()

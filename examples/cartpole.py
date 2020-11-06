@@ -5,7 +5,7 @@ import gym
 def main():
     """Propagates cartpole dynamics."""
     kwargs = {'gravity': 10}
-    env = gym.make('gym_continuous_classic_control.envs:ContinuousCartPole-v0',
+    env = gym.make('gym_ccc.envs:ContCartPole-v0',
                    **kwargs)
 
     env.reset()

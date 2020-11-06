@@ -1,9 +1,9 @@
-# gym-continuous-classic-control
-A repo of gym environments for classic control problems. In particular, this
-repo offers gym environments where the observation is the state of the
-system as given by the dynamics. In addition to these environments, normalized
-environments are provided which contain the real state in the `infos` output and
-the observation is instead some normalized version of the state.
+# gym-ccc
+A repo of gym environments for continuous classic control (ccc) problems. In
+particular, this repo offers gym environments where the observation is the state
+of the system as given by the dynamics. In addition to these environments,
+normalized environments are provided which contain the real state in the `info`
+output and the observation is instead some normalized version of the state.
 
 The motivation for this is so that gym environments can be used for control
 problems where the states/observations are not traditionally normalized. The
