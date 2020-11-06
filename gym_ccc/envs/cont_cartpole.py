@@ -1,6 +1,4 @@
 """Continuous CartPole Environment."""
-import math
-
 from gym import spaces
 from gym.envs import classic_control
 
@@ -64,8 +62,8 @@ class NonNormContCartPoleEnv(classic_control.CartPoleEnv):
         """Propagate dynamics."""
         pos, pos_dot, theta, theta_dot = self.state
         force = action
-        costheta = math.cos(theta)
-        sintheta = math.sin(theta)
+        costheta = np.cos(theta)
+        sintheta = np.sin(theta)
 
         temp = self.masscart + self.masspole * sintheta ** 2
         pos_acc = 1/temp * (self.masspole * sintheta *
@@ -117,7 +115,7 @@ class ContCartPoleEnv(NonNormContCartPoleEnv):
 
     def _get_obs(self):
         pos, pos_dot, theta, theta_dot = self.state
-        return np.array([pos, pos_dot, math.cos(theta), math.sin(theta),
+        return np.array([pos, pos_dot, np.cos(theta), np.sin(theta),
                          theta_dot])
 
 
