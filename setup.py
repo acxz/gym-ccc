@@ -1,3 +1,5 @@
+"""Setup file."""
+
 from setuptools import setup
 
 setup(
@@ -5,11 +7,11 @@ setup(
     version='0.0.1',
     author='acxz',
     long_description='',
-    description='',
-    zip_safe=False,
+    description='Environments for classical control problems with dynamical' +
+            'state information',
     packages=['gym_continuous_classic_control'],
     install_requires=[
-        "gym",
-        "numpy",
+        'gym',
+        'numpy',
     ],
 )

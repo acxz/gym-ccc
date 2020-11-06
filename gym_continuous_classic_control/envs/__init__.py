@@ -1,8 +1,22 @@
+"""Register environments."""
 from gym.envs.registration import register
+
+import gym_continuous_classic_control.envs.continuous_car.ContinuousCarEnv
+import gym_continuous_classic_control.envs.continuous_car. \
+        NonNormalizedContinuousCarEnv
+import gym_continuous_classic_control.envs.continuous_cartpole. \
+        ContinuousCartPoleEnv
+import gym_continuous_classic_control.envs.continuous_cartpole. \
+        NonNormalizedContinuousCartPoleEnv
+import gym_continuous_classic_control.envs.continuous_pendulum. \
+        ContinuousPendulumEnv
+import gym_continuous_classic_control.envs.continuous_pendulum. \
+        NonNormalizedContinuousPendulumEnv
 
 register(
     id='NonNormalizedContinuousPendulum-v0',
-    entry_point='gym_continuous_classic_control.envs:NonNormalizedContinuousPendulumEnv',
+    entry_point=('gym_continuous_classic_control.envs:',
+                 'NonNormalizedContinuousPendulumEnv'),
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -20,7 +34,8 @@ register(
 
 register(
     id='NonNormalizedContinuousCartPole-v0',
-    entry_point='gym_continuous_classic_control.envs:NonNormalizedContinuousCartPoleEnv',
+    entry_point=('gym_continuous_classic_control.envs:',
+                 'NonNormalizedContinuousCartPoleEnv'),
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -38,7 +53,8 @@ register(
 
 register(
     id='NonNormalizedContinuousCar-v0',
-    entry_point='gym_continuous_classic_control.envs:NonNormalizedContinuousCarEnv',
+    entry_point=('gym_continuous_classic_control.envs:',
+                 'NonNormalizedContinuousCarEnv'),
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -53,10 +69,3 @@ register(
     max_episode_steps=None,
     kwargs={},
 )
-
-from gym_continuous_classic_control.envs.continuous_pendulum import NonNormalizedContinuousPendulumEnv
-from gym_continuous_classic_control.envs.continuous_pendulum import ContinuousPendulumEnv
-from gym_continuous_classic_control.envs.continuous_cartpole import NonNormalizedContinuousCartPoleEnv
-from gym_continuous_classic_control.envs.continuous_cartpole import ContinuousCartPoleEnv
-from gym_continuous_classic_control.envs.continuous_car import NonNormalizedContinuousCarEnv
-from gym_continuous_classic_control.envs.continuous_car import ContinuousCarEnv

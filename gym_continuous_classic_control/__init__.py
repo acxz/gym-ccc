@@ -1,1 +1,1 @@
-from gym_continuous_classic_control import envs
+import gym_continuous_classic_control.envs
