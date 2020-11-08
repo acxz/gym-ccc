@@ -6,7 +6,7 @@ from gym.utils import seeding
 import numpy as np
 
 
-class NonNormContCarEnv(gym.Env):
+class CarNonNormEnv(gym.Env):
     """
     Continuous car that outpus the state as the observation.
 
@@ -86,7 +86,7 @@ class NonNormContCarEnv(gym.Env):
         print(self.state)
 
 
-class ContCarEnv(NonNormContCarEnv):
+class CarEnv(CarNonNormEnv):
     """Continuous car that outputs normalized observation and state in info."""
 
     def __init__(self, **kwargs):

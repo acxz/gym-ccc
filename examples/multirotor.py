@@ -46,7 +46,7 @@ def control(state):
 
 def main():
     """Propagates multirotor dynamics."""
-    env = gym.make('gym_ccc.envs:NonNormContMultirotor2DSimplified-v0')
+    env = gym.make('gym_ccc.envs:Multirotor2DSimpNonNormCont-v0')
 
     obs = env.reset()
     while True:

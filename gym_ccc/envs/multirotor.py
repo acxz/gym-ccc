@@ -9,7 +9,7 @@ import numpy as np
 from pyquaternion import Quaternion
 
 
-class NonNormContMultirotorEnv(gym.Env):
+class MultirotorNonNormEnv(gym.Env):
     """
     Continuous multirotor that outputs the state as the observation.
 
@@ -138,7 +138,7 @@ class NonNormContMultirotorEnv(gym.Env):
         print(self.state)
 
 
-class NonNormContMultirotorSimplifiedEnv(gym.Env):
+class MultirotorSimpNonNormEnv(gym.Env):
     """
     Continuous multirotor with higher level control.
 
@@ -252,7 +252,7 @@ class NonNormContMultirotorSimplifiedEnv(gym.Env):
         print(self.state)
 
 
-class NonNormContMultirotor2DSimplifiedEnv(gym.Env):
+class Multirotor2DSimpNonNormEnv(gym.Env):
     """
     Continuous multirotor on the y - z axis with higher level control.
 

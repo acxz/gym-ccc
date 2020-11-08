@@ -1,18 +1,22 @@
 """Register environments."""
 from gym.envs.registration import register
 
-from gym_ccc.envs.car import ContCarEnv  # noqa: F401
-from gym_ccc.envs.car import NonNormContCarEnv  # noqa: F401
-from gym_ccc.envs.cartpole import ContCartPoleEnv  # noqa: F401
-from gym_ccc.envs.cartpole import NonNormContCartPoleEnv  # noqa: F401
-from gym_ccc.envs.multirotor import NonNormContMultirotor2DSimplifiedEnv  # noqa: F401, E501
-from gym_ccc.envs.multirotor import NonNormContMultirotorEnv  # noqa: F401
-from gym_ccc.envs.pendulum import ContPendulumEnv  # noqa: F401
-from gym_ccc.envs.pendulum import NonNormContPendulumEnv  # noqa: F401
+from gym_ccc.envs.car import CarEnv  # noqa: F401
+from gym_ccc.envs.car import CarNonNormEnv  # noqa: F401
+from gym_ccc.envs.cartpole import CartPoleEnv  # noqa: F401
+from gym_ccc.envs.cartpole import CartPoleNonNormEnv  # noqa: F401
+# from gym_ccc.envs.multirotor import Multirotor2DSimpEnv  # noqa: F401, E501
+from gym_ccc.envs.multirotor import Multirotor2DSimpNonNormEnv  # noqa: F401, E501
+# from gym_ccc.envs.multirotor import MultirotorEnv  # noqa: F401
+from gym_ccc.envs.multirotor import MultirotorNonNormEnv  # noqa: F401
+# from gym_ccc.envs.multirotor import MultirotorSimpEnv  # noqa: F401
+from gym_ccc.envs.multirotor import MultirotorSimpNonNormEnv  # noqa: F401
+from gym_ccc.envs.pendulum import PendulumEnv  # noqa: F401
+from gym_ccc.envs.pendulum import PendulumNonNormEnv  # noqa: F401
 
 register(
-    id='ContCar-v0',
-    entry_point='gym_ccc.envs:ContCarEnv',
+    id='CarCont-v0',
+    entry_point='gym_ccc.envs:CarEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -20,8 +24,8 @@ register(
 )
 
 register(
-    id='NonNormContCar-v0',
-    entry_point='gym_ccc.envs:NonNormContCarEnv',
+    id='CarNonNormCont-v0',
+    entry_point='gym_ccc.envs:CarNonNormEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -29,8 +33,8 @@ register(
 )
 
 register(
-    id='ContCartPole-v0',
-    entry_point='gym_ccc.envs:ContCartPoleEnv',
+    id='CartPoleCont-v0',
+    entry_point='gym_ccc.envs:CartPoleEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -38,8 +42,8 @@ register(
 )
 
 register(
-    id='NonNormContCartPole-v0',
-    entry_point='gym_ccc.envs:NonNormContCartPoleEnv',
+    id='CartPoleNonNormCont-v0',
+    entry_point='gym_ccc.envs:CartPoleNonNormEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -47,8 +51,8 @@ register(
 )
 
 register(
-    id='NonNormContMultirotor2DSimplified-v0',
-    entry_point='gym_ccc.envs:NonNormContMultirotor2DSimplifiedEnv',
+    id='Multirotor2DSimpNonNormCont-v0',
+    entry_point='gym_ccc.envs:Multirotor2DSimpNonNormEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -56,8 +60,8 @@ register(
 )
 
 register(
-    id='NonNormContMultirotor-v0',
-    entry_point='gym_ccc.envs:NonNormContMultirotorEnv',
+    id='MultirotorNonNormCont-v0',
+    entry_point='gym_ccc.envs:MultirotorNonNormEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -65,8 +69,8 @@ register(
 )
 
 register(
-    id='ContPendulum-v0',
-    entry_point='gym_ccc.envs:ContPendulumEnv',
+    id='PendulumCont-v0',
+    entry_point='gym_ccc.envs:PendulumEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
@@ -74,8 +78,8 @@ register(
 )
 
 register(
-    id='NonNormContPendulum-v0',
-    entry_point='gym_ccc.envs:NonNormContPendulumEnv',
+    id='PendulumNonNormCont-v0',
+    entry_point='gym_ccc.envs:PendulumNonNormEnv',
     reward_threshold=None,
     nondeterministic=False,
     max_episode_steps=None,
