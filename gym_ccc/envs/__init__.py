@@ -1,14 +1,14 @@
 """Register environments."""
 from gym.envs.registration import register
 
-from gym_ccc.envs.cont_car import ContCarEnv  # noqa: F401
-from gym_ccc.envs.cont_car import NonNormContCarEnv  # noqa: F401
-from gym_ccc.envs.cont_cartpole import ContCartPoleEnv  # noqa: F401
-from gym_ccc.envs.cont_cartpole import NonNormContCartPoleEnv  # noqa: F401
-from gym_ccc.envs.cont_multirotor import NonNormContMultirotor2DSimplifiedEnv  # noqa: F401, E501
-from gym_ccc.envs.cont_multirotor import NonNormContMultirotorEnv  # noqa: F401
-from gym_ccc.envs.cont_pendulum import ContPendulumEnv  # noqa: F401
-from gym_ccc.envs.cont_pendulum import NonNormContPendulumEnv  # noqa: F401
+from gym_ccc.envs.car import ContCarEnv  # noqa: F401
+from gym_ccc.envs.car import NonNormContCarEnv  # noqa: F401
+from gym_ccc.envs.cartpole import ContCartPoleEnv  # noqa: F401
+from gym_ccc.envs.cartpole import NonNormContCartPoleEnv  # noqa: F401
+from gym_ccc.envs.multirotor import NonNormContMultirotor2DSimplifiedEnv  # noqa: F401, E501
+from gym_ccc.envs.multirotor import NonNormContMultirotorEnv  # noqa: F401
+from gym_ccc.envs.pendulum import ContPendulumEnv  # noqa: F401
+from gym_ccc.envs.pendulum import NonNormContPendulumEnv  # noqa: F401
 
 register(
     id='ContCar-v0',
