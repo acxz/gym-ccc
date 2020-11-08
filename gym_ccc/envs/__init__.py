@@ -5,6 +5,7 @@ from gym_ccc.envs.cont_car import ContCarEnv  # noqa: F401
 from gym_ccc.envs.cont_car import NonNormContCarEnv  # noqa: F401
 from gym_ccc.envs.cont_cartpole import ContCartPoleEnv  # noqa: F401
 from gym_ccc.envs.cont_cartpole import NonNormContCartPoleEnv  # noqa: F401
+from gym_ccc.envs.cont_multirotor import NonNormContMultirotor2DSimplifiedEnv  # noqa: F401, E501
 from gym_ccc.envs.cont_multirotor import NonNormContMultirotorEnv  # noqa: F401
 from gym_ccc.envs.cont_pendulum import ContPendulumEnv  # noqa: F401
 from gym_ccc.envs.cont_pendulum import NonNormContPendulumEnv  # noqa: F401
@@ -46,7 +47,16 @@ register(
 )
 
 register(
-    id='NonNormContMultirotorPole-v0',
+    id='NonNormContMultirotor2DSimplified-v0',
+    entry_point='gym_ccc.envs:NonNormContMultirotor2DSimplifiedEnv',
+    reward_threshold=None,
+    nondeterministic=False,
+    max_episode_steps=None,
+    kwargs={},
+)
+
+register(
+    id='NonNormContMultirotor-v0',
     entry_point='gym_ccc.envs:NonNormContMultirotorEnv',
     reward_threshold=None,
     nondeterministic=False,

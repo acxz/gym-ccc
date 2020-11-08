@@ -12,6 +12,7 @@ setup(
     packages=['gym_ccc'],
     install_requires=[
         'gym',
+        'gym-copter',
         'numpy',
     ],
 )

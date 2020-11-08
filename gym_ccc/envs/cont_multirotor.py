@@ -2,6 +2,8 @@
 import gym
 from gym import spaces
 
+import gym_copter.rendering.twod as twod
+
 import numpy as np
 
 from pyquaternion import Quaternion
@@ -121,7 +123,7 @@ class NonNormContMultirotorEnv(gym.Env):
         quat = quat.normalize
         ang_vel = ang_vel + self.dt * ang_vel_dot
 
-        self.state = np.hcat(pos, vel, quat, ang_vel)
+        self.state = np.hstack((pos, vel, quat, ang_vel))
 
         return self.state, 0, False, {}
 
@@ -235,7 +237,7 @@ class NonNormContMultirotorSimplifiedEnv(gym.Env):
         quat = quat + self.dt * quat_dot
         quat = quat.normalize
 
-        self.state = np.hcat(pos, vel, quat)
+        self.state = np.hstack((pos, vel, quat))
 
         return self.state, 0, False, {}
 
@@ -252,29 +254,35 @@ class NonNormContMultirotorSimplifiedEnv(gym.Env):
 
 class NonNormContMultirotor2DSimplifiedEnv(gym.Env):
     """
-    Continuous multirotor on the x - z axis with higher level control.
+    Continuous multirotor on the y - z axis with higher level control.
 
     Description:
-        Multirotor dynamics where the control input is the y (pitch)
+        Multirotor dynamics where the control input is the x (roll)
         angular velocity and the thrust acting on the multirotor.
     Observation:
         Type: Box(4)
         Num     Observation                 Min                     Max
-        0       x position                  -Inf                    Inf
+        0       y position                  -Inf                    Inf
         1       z position                  -Inf                    Inf
-        2       x velocity                  -Inf                    Inf
+        2       y velocity                  -Inf                    Inf
         3       z velocity                  -Inf                    Inf
-        4       pitch angle                 -Pi                     Pi
+        4       roll angle                  -Pi                     Pi
     Actions:
         Type: Box(1)
         Num   Action                        Min                     Max
-        0     (pitch) y angular velocity    -Inf                    Inf
+        0     (roll) x angular velocity     -Inf                    Inf
         1     thrust                        -Inf                    Inf
     Reward:
         None
     Starting State:
         Height of 0 meter with a heading of 0 at stable attitude.
     """
+
+    frames_per_second = 50
+    metadata = {
+        'render.modes': ['human', 'rgb_array'],
+        'video.frames_per_second': frames_per_second
+    }
 
     def __init__(self, gravity=9.8, mass=1.0, dt=0.02):
         """Init quadrotor env."""
@@ -302,29 +310,36 @@ class NonNormContMultirotor2DSimplifiedEnv(gym.Env):
         self.observation_space = spaces.Box(-obs_high,
                                             obs_high, dtype=np.float32)
 
+        # Support for rendering
+        self.renderer = None
+        self.pose = None
+
     def step(self, action):
         """Propagate dynamics."""
         pos = self.state[0:2]
         vel = self.state[2:4]
-        pitch_ang = self.state[4]
+        roll_ang = self.state[4]
 
-        pitch_ang_vel = action[0]
+        roll_ang_vel = action[0]
         thrust = action[1]
 
         pos_dot = vel
-        rotation_matrix = np.array([[np.cos(pitch_ang), -np.sin(pitch_ang)],
-                                    [np.sin(pitch_ang), np.cos(pitch_ang)]])
+        rotation_matrix = np.array([[np.cos(roll_ang), -np.sin(roll_ang)],
+                                    [np.sin(roll_ang), np.cos(roll_ang)]])
         vel_dot = (thrust / self.mass) * \
             np.array([0, 1]) @ rotation_matrix - \
             np.array([0, 1]) * self.gravity
-        pitch_ang_dot = pitch_ang_vel
+        roll_ang_dot = roll_ang_vel
 
         pos = pos + self.dt * pos_dot
         vel = vel + self.dt * vel_dot
-        pitch_ang = pitch_ang + self.dt * pitch_ang_dot
-        pitch_ang = _angle_normalize(pitch_ang)
+        roll_ang = roll_ang + self.dt * roll_ang_dot
+        roll_ang = _angle_normalize(roll_ang)
 
-        self.state = np.hcat(pos, vel, pitch_ang)
+        self.state = np.hstack((pos, vel, roll_ang))
+
+        # Support for rendering
+        self.pose = -pos[0], -pos[1], roll_ang
 
         return self.state, 0, False, {}
 
@@ -335,7 +350,15 @@ class NonNormContMultirotor2DSimplifiedEnv(gym.Env):
 
     def render(self, mode='human'):
         """Show the current state."""
-        print(self.state)
+        # Creater renderer
+        if self.renderer is None:
+            self.renderer = twod.TwoDRenderer()
+
+        # Just a flag to show the props spinning
+        flight_status = True
+
+        self.renderer.render(self.pose, flight_status)
+        return self.renderer.complete(mode)
 
 
 def _angle_normalize(ang):
