@@ -5,6 +5,13 @@ of the system as given by the dynamics. In addition to these environments,
 normalized environments are provided which contain the real state in the `info`
 output and the observation is instead some normalized version of the state.
 
+The main highlights are:
+1) non normalized observation corresponding directly to the dynamical state
+2) normalized observation with dynamical state captured in `info['state']`
+3) action spaces are continuous
+4) system parameters (mass, length, etc.) can be specificed
+5) reset function (to specify initial conditions) can be specified.
+
 The motivation for this is so that gym environments can be used for control
 problems where the states/observations are not traditionally normalized. The
 observations in gym environments are normalized since the observation vector is
@@ -19,15 +26,9 @@ environments to ensure the same dynamics are used.
 If you want to use a different kind of normalization then feel free to extend
 the original gym environments and output a normalized observation of your own
 choosing. Similarly, you can extend the gym environments to disregard the given
-reward shape and implement your own. See gym wrappers for how to do this. 
+reward shape and implement your own. See gym wrappers for how to do this.
 (https://alexandervandekleut.github.io/gym-wrappers/)
 
-The main highlights are:
-1) non normalized observation corresponding directly to the dynamical state
-2) normalized observation with dynamical state captured in `info['state']`
-3) action spaces are continuous
-4) system parameters (mass, length, etc.) can be specificed
-5) reset function (to specify initial conditions) can be specified.
 
 ## Installation
 
