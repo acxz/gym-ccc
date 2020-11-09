@@ -31,6 +31,12 @@ The main highlights are:
 
 ## Installation
 
+You'll have to install a dependency not available on PyPi manually first.
+
+- [gym-copter](https://github.com/simondlevy/gym-copter)
+
+The rest of the dependencies will come through with the `pip install` command.
+
 ```bash
 pip install .
 ```
