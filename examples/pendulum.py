@@ -6,14 +6,24 @@ import numpy as np
 
 def main():
     """Propagates pendulum dynamics."""
-    kwargs = {'gravity': 9.8, 'mass': 1, 'length': 1, 'damping': 1, 'dt': 0.05}
+
+    def my_reset():
+        init_state = np.array([np.pi, 0])
+        return init_state
+
+    kwargs = {'gravity': 10, 'mass': 1, 'length': 1, 'dt': 0.05,
+              'custom_reset': my_reset}
     env = gym.make('gym_ccc.envs:PendulumCont-v0',
                    **kwargs)
 
     env.reset()
     while True:
-        _, _, _, info = env.step(np.array([0]))
-        print('\r' + str(info['state']), end='')
+        obs, reward, _, info = env.step(np.array([0]))
+        print('time: ' + str(info['time']))
+        print('reward: ' + str(reward))
+        print('state: ' + str(info['state']))
+        print('obs: ' + str(obs))
+        print()
         env.render('human')
 
 
