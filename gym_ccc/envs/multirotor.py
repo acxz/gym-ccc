@@ -9,6 +9,7 @@ import numpy as np
 from pyquaternion import Quaternion
 
 
+# pylint: disable=too-many-instance-attributes
 class MultirotorNonNormEnv(gym.Env):
     """
     Continuous multirotor that outputs the state as the observation.
@@ -40,13 +41,14 @@ class MultirotorNonNormEnv(gym.Env):
         2     z moment                      -Inf                    Inf
         3     thrust                        -Inf                    Inf
     Reward:
-        None
+        Quadratic cost to stable hover at pos = [5, 5, 5]
     Starting State:
         Height of 0 meter with a heading of 0 at stable attitude.
     """
 
+    # pylint: disable=too-many-arguments
     def __init__(self, gravity=9.8, mass=1.0, inertia=np.diag(np.ones(3)),
-                 dt=0.02):
+                 dt=0.02, custom_reset=None):
         """Init quadrotor env."""
         super().__init__()
 
@@ -55,7 +57,11 @@ class MultirotorNonNormEnv(gym.Env):
         self.inertia = inertia
         # pylint: disable=invalid-name
         self.dt = dt
-        self.state = np.zeros(13)
+
+        self.state = None
+        self.time = 0
+
+        self.custom_reset = custom_reset
 
         action_high = np.array([np.finfo(np.float32).max,
                                 np.finfo(np.float32).max,
@@ -106,6 +112,10 @@ class MultirotorNonNormEnv(gym.Env):
         moments = action[0:3]
         thrust = action[4]
 
+        goal_state = np.array([5, 5, 5, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
+        cost = np.transpose(self.state - goal_state) @ \
+            np.eye(self.state.shape[0]) @ (self.state - goal_state)
+
         quat = Quaternion(quat)
         rotation_matrix = quat.rotation_matrix
 
@@ -122,19 +132,23 @@ class MultirotorNonNormEnv(gym.Env):
         quat = quat + self.dt * quat_dot
         quat = quat.normalize
         ang_vel = ang_vel + self.dt * ang_vel_dot
+        self.time += self.dt
 
         self.state = np.hstack((pos, vel, quat, ang_vel))
 
-        return self.state, 0, False, {}
+        return self.state, -cost, False, {'time': self.time}
 
     def reset(self):
-        """Reset to attitude stable state."""
-        self.state = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
-        return self.state
+        """Reset environment."""
+        self.time = 0
+        if self.custom_reset is not None:
+            self.state = self.custom_reset()
+        else:
+            self.state = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
+        return self.state, 0, False, {'time': self.time}
 
     def render(self, mode='human'):
         """Show the current state."""
-        # Do an euler angle conversion for ease of readability
         print(self.state)
 
 
@@ -166,12 +180,12 @@ class MultirotorSimpNonNormEnv(gym.Env):
         2     (yaw) z angular velocity      -Inf                    Inf
         3     thrust                        -Inf                    Inf
     Reward:
-        None
+        Quadratic cost to stable hover at pos = [5, 5, 5]
     Starting State:
         Height of 0 meter with a heading of 0 at stable attitude.
     """
 
-    def __init__(self, gravity=9.8, mass=1.0, dt=0.02):
+    def __init__(self, gravity=9.8, mass=1.0, dt=0.02, custom_reset=None):
         """Init quadrotor env."""
         super().__init__()
 
@@ -179,7 +193,11 @@ class MultirotorSimpNonNormEnv(gym.Env):
         self.mass = mass
         # pylint: disable=invalid-name
         self.dt = dt
-        self.state = np.zeros(10)
+
+        self.state = None
+        self.time = 0
+
+        self.custom_reset = custom_reset
 
         action_high = np.array([np.finfo(np.float32).max,
                                 np.finfo(np.float32).max,
@@ -223,6 +241,10 @@ class MultirotorSimpNonNormEnv(gym.Env):
         ang_vel = action[0:3]
         thrust = action[4]
 
+        goal_state = np.array([5, 5, 5, 0, 0, 0, 1, 0, 0, 0])
+        cost = np.transpose(self.state - goal_state) @ \
+            np.eye(self.state.shape[0]) @ (self.state - goal_state)
+
         quat = Quaternion(quat)
         rotation_matrix = quat.rotation_matrix
 
@@ -236,19 +258,23 @@ class MultirotorSimpNonNormEnv(gym.Env):
         vel = vel + self.dt * vel_dot
         quat = quat + self.dt * quat_dot
         quat = quat.normalize
+        self.time += self.dt
 
         self.state = np.hstack((pos, vel, quat))
 
-        return self.state, 0, False, {}
+        return self.state, -cost, False, {'time': self.time}
 
     def reset(self):
         """Reset to attitude stable state."""
-        self.state = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0])
-        return self.state
+        self.time = 0
+        if self.custom_reset is not None:
+            self.state = self.custom_reset()
+        else:
+            self.state = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+        return self.state, 0, False, {'time': self.time}
 
     def render(self, mode='human'):
         """Show the current state."""
-        # Do an euler angle conversion for ease of readability
         print(self.state)
 
 
@@ -273,7 +299,7 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
         0     (roll) x angular velocity     -Inf                    Inf
         1     thrust                        -Inf                    Inf
     Reward:
-        None
+        Quadratic cost to stable hover at pos = [5, 5]
     Starting State:
         Height of 0 meter with a heading of 0 at stable attitude.
     """
@@ -284,7 +310,7 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
         'video.frames_per_second': frames_per_second
     }
 
-    def __init__(self, gravity=9.8, mass=1.0, dt=0.02):
+    def __init__(self, gravity=9.8, mass=1.0, dt=0.02, custom_reset=None):
         """Init quadrotor env."""
         super().__init__()
 
@@ -292,7 +318,11 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
         self.mass = mass
         # pylint: disable=invalid-name
         self.dt = dt
-        self.state = np.zeros(5)
+
+        self.state = None
+        self.time = 0
+
+        self.custom_reset = custom_reset
 
         action_high = np.array([np.finfo(np.float32).max,
                                 np.finfo(np.float32).max],
@@ -323,6 +353,10 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
         roll_ang_vel = action[0]
         thrust = action[1]
 
+        goal_state = np.array([5, 5, 0, 0, 0])
+        cost = np.transpose(self.state - goal_state) @ \
+            np.eye(self.state.shape[0]) @ (self.state - goal_state)
+
         pos_dot = vel
         rotation_matrix = np.array([[np.cos(roll_ang), -np.sin(roll_ang)],
                                     [np.sin(roll_ang), np.cos(roll_ang)]])
@@ -334,19 +368,24 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
         pos = pos + self.dt * pos_dot
         vel = vel + self.dt * vel_dot
         roll_ang = roll_ang + self.dt * roll_ang_dot
-        roll_ang = _angle_normalize(roll_ang)
+        roll_ang = self.angle_normalize(roll_ang)
+        self.time += self.dt
 
         self.state = np.hstack((pos, vel, roll_ang))
 
         # Support for rendering
         self.pose = -pos[0], -pos[1], roll_ang
 
-        return self.state, 0, False, {}
+        return self.state, -cost, False, {'time': self.time}
 
     def reset(self):
         """Reset to attitude stable state."""
-        self.state = np.array([0, 0, 0, 0, 0])
-        return self.state
+        self.time = 0
+        if self.custom_reset is not None:
+            self.state = self.custom_reset()
+        else:
+            self.state = np.array([0, 0, 0, 0, 0])
+        return self.state, 0, False, {'time': self.time}
 
     def render(self, mode='human'):
         """Show the current state."""
@@ -360,7 +399,7 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
         self.renderer.render(self.pose, flight_status)
         return self.renderer.complete(mode)
 
-
-def _angle_normalize(ang):
-    """Normalize angle between -pi and pi."""
-    return ((ang+np.pi) % (2*np.pi)) - np.pi
+    @staticmethod
+    def angle_normalize(ang):
+        """Normalize angle between -pi and pi."""
+        return ((ang+np.pi) % (2*np.pi)) - np.pi
