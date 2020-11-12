@@ -25,14 +25,18 @@ class CarNonNormEnv(gym.Env):
         0     Acceleraton                 -Inf                    Inf
         1     Steering Rate               -Inf                    Inf
     Reward:
-        None
+        Quadratic cost on reaching [5, 5, 0, 0]
     """
 
-    def __init__(self, dt=0.02):
+    def __init__(self, dt=0.02, custom_reset=None):
         """Init."""
         # pylint: disable=invalid-name
         self.dt = dt
+
         self.state = None
+        self.time = 0
+
+        self.custom_reset = custom_reset
 
         action_high = np.array([np.finfo(np.float32).max,
                                 np.finfo(np.float32).max], dtype=np.float32)
@@ -58,6 +62,10 @@ class CarNonNormEnv(gym.Env):
         """Propagates car dynamics."""
         pos_x, pos_y, theta, vel = self.state
         u_theta, u_v = action
+        self.time += self.dt
+
+        cost = (pos_x - 5) ** 2 + (pos_y - 5) ** 2 + theta ** 2 + vel ** 2
+
         costheta = np.cos(theta)
         sintheta = np.sin(theta)
 
@@ -71,15 +79,25 @@ class CarNonNormEnv(gym.Env):
         theta = theta + self.dt * theta_dot
         vel = vel + self.dt * v_dot
 
-        theta = _angle_normalize(theta)
-        self.state = (pos_x, pos_y, theta, vel)
+        theta = self.angle_normalize(theta)
+        self.state = np.array([pos_x, pos_y, theta, vel])
 
-        return np.array(self.state), 0, False, {}
+        return self.state, -cost, False, {'time': self.time}
 
     def reset(self):
-        """Reset state to random value."""
-        self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
-        return self.state
+        """Reset environment."""
+        self.time = 0
+        if self.custom_reset is not None:
+            self.state = self.custom_reset()
+        else:
+            self.state = \
+                self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
+        return self.state, 0, False, {'time': self.time}
+
+    @staticmethod
+    def angle_normalize(ang):
+        """Normalize angle between -pi and pi."""
+        return ((ang+np.pi) % (2*np.pi)) - np.pi
 
     def render(self, mode='human'):
         """Show the current state."""
@@ -93,6 +111,16 @@ class CarEnv(CarNonNormEnv):
         """Init."""
         super().__init__(**kwargs)
 
+        obs_high = np.array([np.finfo(np.float32).max,
+                             np.finfo(np.float32).max,
+                             1,
+                             1,
+                             np.finfo(np.float32).max],
+                            dtype=np.float32)
+
+        self.observation_space = spaces.Box(-obs_high,
+                                            obs_high, dtype=np.float32)
+
     def step(self, action):
         """Propagate dynamics forward."""
         _, reward, done, info = super().step(action)
@@ -102,13 +130,9 @@ class CarEnv(CarNonNormEnv):
 
     def reset(self):
         """Reset state to random value."""
-        self.state = super().reset()
-        return self._get_obs()
+        self.state, reward, done, info = super().reset()
+        return self._get_obs(), reward, done, info
 
     def _get_obs(self):
         pos_x, pos_y, theta, vel = self.state
         return np.array([pos_x, pos_y, np.cos(theta), np.sin(theta), vel])
-
-
-def _angle_normalize(ang):
-    return ((ang+np.pi) % (2*np.pi)) - np.pi
