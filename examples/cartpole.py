@@ -1,17 +1,21 @@
-"""Example file for cartpole."""
+"""Example cartpole."""
 import gym
+
+import numpy as np
 
 
 def main():
     """Propagates cartpole dynamics."""
-    kwargs = {'gravity': 10}
-    env = gym.make('gym_ccc.envs:CartPoleCont-v0',
-                   **kwargs)
+    env = gym.make('gym_ccc.envs:CartPoleCont-v0')
 
     env.reset()
     while True:
-        _, _, _, info = env.step(0)
-        print('\r' + str(info['state']), end='')
+        obs, reward, _, info = env.step(np.array([0]))
+        print('time: ' + str(info['time']))
+        print('reward: ' + str(reward))
+        print('state: ' + str(info['state']))
+        print('obs: ' + str(obs))
+        print()
         env.render('human')
 
 
