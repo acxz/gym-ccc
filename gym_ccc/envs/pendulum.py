@@ -51,25 +51,23 @@ class PendulumNonNormEnv(classic_control.PendulumEnv):
         mass = self.mass
         length = self.length
         damping = self.damping
-        # pylint: disable=invalid-name
-        dt = self.dt
-        self.time += dt
+        self.time += self.dt
 
         torque = np.clip(u, -self.max_torque, self.max_torque)[0]
         self.last_u = torque  # for rendering
-        costs = self.angle_normalize(theta) ** 2 + 0.1 * theta_dot ** 2 + \
+        cost = self.angle_normalize(theta) ** 2 + 0.1 * theta_dot ** 2 + \
             0.001 * torque ** 2
 
-        new_theta = theta + theta_dot * dt
+        new_theta = theta + theta_dot * self.dt
         new_theta = self.angle_normalize(new_theta)
         new_theta_dot = theta_dot + \
             (-gravity / length * np.sin(theta + np.pi) -
              (damping * theta_dot + torque) /
-             (mass * length ** 2)) * dt
+             (mass * length ** 2)) * self.dt
         new_theta_dot = np.clip(new_theta_dot, -self.max_speed, self.max_speed)
 
         self.state = np.array([new_theta, new_theta_dot])
-        return self.state, -costs, False, {'time': self.time}
+        return self.state, -cost, False, {'time': self.time}
 
     def reset(self):
         """Reset environment."""
