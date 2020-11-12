@@ -43,6 +43,7 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
         self.masspole = masspole
         self.polelength = polelength
         self.length = self.polelength/2  # For rendering purposes
+        # pylint: disable=invalid-name
         self.dt = dt
 
         self.state = None
@@ -110,7 +111,7 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
     @staticmethod
     def angle_normalize(ang):
         """Normalize angle between -pi and pi."""
-        return (((ang+np.pi) % (2*np.pi)) - np.pi)
+        return ((ang+np.pi) % (2*np.pi)) - np.pi
 
 
 class CartPoleEnv(CartPoleNonNormEnv):
@@ -122,6 +123,7 @@ class CartPoleEnv(CartPoleNonNormEnv):
 
         obs_high = np.array([np.finfo(np.float32).max,
                              np.finfo(np.float32).max,
+                             1,
                              1,
                              np.finfo(np.float32).max],
                             dtype=np.float32)
@@ -145,5 +147,3 @@ class CartPoleEnv(CartPoleNonNormEnv):
         pos, pos_dot, theta, theta_dot = self.state
         return np.array([pos, pos_dot, np.cos(theta), np.sin(theta),
                          theta_dot])
-
-
