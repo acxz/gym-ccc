@@ -8,9 +8,10 @@ output and the observation is instead some normalized version of the state.
 The main highlights are:
 1) non normalized observation corresponding directly to the dynamical state
 2) normalized observation with dynamical state captured in `info['state']`
-3) action spaces are continuous
-4) system parameters (mass, length, etc.) can be specificed
-5) reset function (to specify initial conditions) can be specified.
+3) environment elapsed time captured in `info['time']`
+4) action spaces are continuous
+5) system parameters (mass, length, etc.) can be specificed
+6) reset function (to specify initial conditions) can be specified.
 
 The motivation for this is so that gym environments can be used for control
 problems where the states/observations are not traditionally normalized. The
