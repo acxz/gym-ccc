@@ -95,6 +95,12 @@ class PendulumEnv(PendulumNonNormEnv):
         """Init according to super."""
         super().__init__(**kwargs)
 
+        self.observation_space = spaces.Box(
+            low=np.array([-1, -1, -self.max_speed], dtype=np.float32),
+            high=np.array([1, 1, self.max_speed], dtype=np.float32),
+            dtype=np.float32
+        )
+
     def step(self, u):
         """Add state to the info dict."""
         _, reward, done, info = super().step(u)
