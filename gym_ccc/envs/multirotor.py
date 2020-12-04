@@ -1,8 +1,13 @@
 """Continuous Multirotor Environment."""
+import sys
+
 import gym
 from gym import spaces
 
-import gym_copter.rendering.twod as twod
+try:
+    import gym_copter.rendering.twod
+except ImportError:
+    pass
 
 import numpy as np
 
@@ -341,7 +346,10 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
                                             obs_high, dtype=np.float32)
 
         # Support for rendering
-        self.renderer = None
+        if 'gym_copter.rendering.twod' in sys.modules:
+            self.renderer = None
+        else:
+            self.renderer = False
         self.pose = None
 
     def step(self, action):
@@ -389,9 +397,14 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
 
     def render(self, mode='human'):
         """Show the current state."""
+        # Print out state instead of cool gui if renderer not available
+        if self.renderer is False:
+            print(self.state)
+            return self.state
+
         # Creater renderer
         if self.renderer is None:
-            self.renderer = twod.TwoDRenderer()
+            self.renderer = gym_copter.rendering.twod.TwoDRenderer()
 
         # Just a flag to show the props spinning
         flight_status = True
