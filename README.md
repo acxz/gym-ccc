@@ -33,7 +33,7 @@ reward shape and implement your own. See gym wrappers for how to do this.
 
 ## Installation
 
-You'll have to install a dependency not available on PyPi manually first.
+An optional dependency for rendering multirotor environments:
 
 - [gym-copter](https://github.com/simondlevy/gym-copter)
 
