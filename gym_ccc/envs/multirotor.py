@@ -1,13 +1,16 @@
 """Continuous Multirotor Environment."""
 import sys
 
+import warnings
+
 import gym
 from gym import spaces
 
 try:
     import gym_copter.rendering.twod
 except ImportError:
-    pass
+    warnings.warn('multirotor gui rendering is disabled, defaulting to console \
+printing')
 
 import numpy as np
 
