@@ -94,7 +94,8 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
         theta_dot = theta_dot + self.dt * theta_acc
 
         theta = self.angle_normalize(theta)
-        self.state = np.array([pos, pos_dot, theta, theta_dot])
+        self.state = np.array([pos, pos_dot, theta, theta_dot],
+                              dtype=np.float32)
 
         return self.state, -cost, False, {'time': self.time}
 
