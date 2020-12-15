@@ -106,7 +106,7 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
         else:
             self.state = \
                 self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
-        return self.state, 0, False, {'time': self.time}
+        return self.state
 
     @staticmethod
     def angle_normalize(ang):
@@ -140,8 +140,8 @@ class CartPoleEnv(CartPoleNonNormEnv):
 
     def reset(self):
         """Reset to a random observation."""
-        self.state, reward, done, info = super().reset()
-        return self._get_obs(), reward, done, info
+        self.state = super().reset()
+        return self._get_obs()
 
     def _get_obs(self):
         pos, pos_dot, theta, theta_dot = self.state

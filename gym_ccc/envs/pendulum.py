@@ -78,7 +78,7 @@ class PendulumNonNormEnv(classic_control.PendulumEnv):
             high = np.array([np.pi, 1])
             self.state = self.np_random.uniform(low=-high, high=high)
         self.last_u = None
-        return self.state, 0, False, {'time': self.time}
+        return self.state
 
     @staticmethod
     def angle_normalize(angle):
@@ -108,6 +108,5 @@ class PendulumEnv(PendulumNonNormEnv):
 
     def reset(self):
         """Reset environment according to super class."""
-        _, reward, done, info = super().reset()
-        info['state'] = self.state
-        return self._get_obs(), reward, done, info
+        self.state = super().reset()
+        return self._get_obs()

@@ -92,7 +92,7 @@ class CarNonNormEnv(gym.Env):
         else:
             self.state = \
                 self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
-        return self.state, 0, False, {'time': self.time}
+        return self.state
 
     @staticmethod
     def angle_normalize(ang):
@@ -130,8 +130,8 @@ class CarEnv(CarNonNormEnv):
 
     def reset(self):
         """Reset state to random value."""
-        self.state, reward, done, info = super().reset()
-        return self._get_obs(), reward, done, info
+        self.state = super().reset()
+        return self._get_obs()
 
     def _get_obs(self):
         pos_x, pos_y, theta, vel = self.state

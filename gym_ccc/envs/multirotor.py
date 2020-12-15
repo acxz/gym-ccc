@@ -150,7 +150,7 @@ class MultirotorNonNormEnv(gym.Env):
             self.state = self.custom_reset()
         else:
             self.state = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
-        return self.state, 0, False, {'time': self.time}
+        return self.state
 
     def render(self, mode='human'):
         """Show the current state."""
@@ -276,7 +276,7 @@ class MultirotorSimpNonNormEnv(gym.Env):
             self.state = self.custom_reset()
         else:
             self.state = np.array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0])
-        return self.state, 0, False, {'time': self.time}
+        return self.state
 
     def render(self, mode='human'):
         """Show the current state."""
@@ -393,7 +393,7 @@ class Multirotor2DSimpNonNormEnv(gym.Env):
             self.state = self.custom_reset()
         else:
             self.state = np.array([0, 0, 0, 0, 0])
-        return self.state, 0, False, {'time': self.time}
+        return self.state
 
     def render(self, mode='human'):
         """Show the current state."""
