@@ -18,7 +18,7 @@ problems where the states/observations are not traditionally normalized. The
 observations in gym environments are normalized since the observation vector is
 directly passed into neural network models and dealing with normalization within
 the neural network for each environment is not feasible. However, this also
-means that gym environments can't be used for control methods that required the
+means that gym environments can't be used for control methods that require the
 non-normalized states/observations.
 
 The normalized environments are directly extended from the non-normalized
