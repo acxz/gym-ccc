@@ -1,7 +1,6 @@
 """Continuous Car Env."""
-import gym
-from gym import spaces
-from gym.utils import seeding
+import gymnasium as gym
+from gymnasium import spaces
 
 import numpy as np
 
@@ -52,12 +51,6 @@ class CarNonNormEnv(gym.Env):
         self.observation_space = spaces.Box(-obs_high,
                                             obs_high, dtype=np.float32)
 
-        self._seed()
-
-    def _seed(self, seed=None):
-        self.np_random, seed = seeding.np_random(seed)
-        return [seed]
-
     def step(self, action):
         """Propagates car dynamics."""
         pos_x, pos_y, theta, vel = self.state
@@ -84,8 +77,11 @@ class CarNonNormEnv(gym.Env):
 
         return self.state, -cost, False, {'time': self.time}
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         """Reset environment."""
+        # We need the following line to seed self.np_random
+        super().reset(seed=seed)
+
         self.time = 0
         if self.custom_reset is not None:
             self.state = self.custom_reset()
@@ -128,9 +124,9 @@ class CarEnv(CarNonNormEnv):
 
         return self._get_obs(), reward, done, info
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         """Reset state to random value."""
-        self.state = super().reset()
+        self.state = super().reset(seed=seed, options=options)
         return self._get_obs()
 
     def _get_obs(self):

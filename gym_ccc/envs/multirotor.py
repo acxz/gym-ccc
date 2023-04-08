@@ -3,8 +3,8 @@ import sys
 
 import warnings
 
-import gym
-from gym import spaces
+import gymnasium as gym
+from gymnasium import spaces
 
 try:
     import gym_copter.rendering.twod

@@ -1,6 +1,8 @@
 """Continuous CartPole Environment."""
-from gym import spaces
-from gym.envs import classic_control
+import gymnasium as gym
+from gymnasium import spaces
+from gymnasium.envs import classic_control
+from gymnasium.envs.classic_control import utils
 
 import numpy as np
 
@@ -33,7 +35,7 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
     """
 
     # pylint: disable=too-many-arguments
-    def __init__(self, gravity=9.8, masscart=1.0, masspole=0.1, polelength=1.0,
+    def __init__(self, render_mode=None, gravity=9.8, masscart=1.0, masspole=0.1, polelength=1.0,
                  dt=0.02, custom_reset=None):
         """Init cartpole env."""
         super().__init__()
@@ -94,20 +96,26 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
         theta_dot = theta_dot + self.dt * theta_acc
 
         theta = self.angle_normalize(theta)
-        self.state = np.array([pos, pos_dot, theta, theta_dot],
-                              dtype=np.float32)
+        self.state = (pos, pos_dot, theta, theta_dot)
 
-        return self.state, -cost, False, {'time': self.time}
+        if self.render_mode == "human":
+            self.render()
 
-    def reset(self):
+        return self.state, -cost, False, False, {'time': self.time}
+
+    def reset(self, *, seed=None, options=None):
         """Reset environment."""
+        super().reset(seed=seed, options=None)
+
         self.time = 0
         if self.custom_reset is not None:
-            self.state = self.custom_reset()
+            self.state, _ = self.custom_reset()
         else:
-            self.state = \
-                self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
-        return self.state
+            # default low and high
+            low, high = utils.maybe_parse_reset_bounds(options, -0.05, 0.05)
+            self.state = self.np_random.uniform(low=low, high=high, size=(4,))
+
+        return np.array(self.state, dtype=np.float32), {}
 
     @staticmethod
     def angle_normalize(ang):
@@ -118,7 +126,7 @@ class CartPoleNonNormEnv(classic_control.CartPoleEnv):
 class CartPoleEnv(CartPoleNonNormEnv):
     """Continuous cartpole with normalized observation and state in info."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, render=None, **kwargs):
         """Init."""
         super().__init__(**kwargs)
 
@@ -134,17 +142,17 @@ class CartPoleEnv(CartPoleNonNormEnv):
 
     def step(self, action):
         """Propagate dynamics forward and keep track of state in info."""
-        _, reward, done, info = super().step(action)
+        _, reward, terminated, truncated, info = super().step(action)
         info['state'] = self.state
 
-        return self._get_obs(), reward, done, info
+        return self._get_obs(), reward, terminated, truncated, info
 
-    def reset(self):
+    def reset(self, *, seed=None, options=None):
         """Reset to a random observation."""
-        self.state = super().reset()
-        return self._get_obs()
+        self.state, _ = super().reset(seed=seed, options=options)
+        return self._get_obs(), {}
 
     def _get_obs(self):
         pos, pos_dot, theta, theta_dot = self.state
-        return np.array([pos, pos_dot, np.cos(theta), np.sin(theta),
-                         theta_dot])
+        obs = (pos, pos_dot, np.cos(theta), np.sin(theta), theta_dot)
+        return np.array(obs, dtype=np.float32)

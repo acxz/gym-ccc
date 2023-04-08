@@ -1,6 +1,7 @@
 """ContinuousPendulum."""
-from gym import spaces
-from gym.envs import classic_control
+import gymnasium as gym
+from gymnasium import spaces
+from gymnasium.envs import classic_control
 
 import numpy as np
 

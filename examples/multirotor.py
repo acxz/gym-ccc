@@ -1,5 +1,5 @@
 """Example file for 2D Multirotor."""
-import gym
+import gymnasium as gym
 
 import numpy as np
 

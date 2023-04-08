@@ -14,7 +14,7 @@ setuptools.setup(
     'dynamical state information',
     packages=setuptools.find_packages(),
     install_requires=[
-        'gym',
+        'gymnasium',
         'numpy',
         'pyquaternion',
     ],

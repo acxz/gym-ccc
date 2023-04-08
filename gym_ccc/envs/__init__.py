@@ -1,5 +1,5 @@
 """Register environments."""
-from gym.envs.registration import register
+from gymnasium.envs.registration import register
 
 from gym_ccc.envs.car import CarEnv  # noqa: F401
 from gym_ccc.envs.car import CarNonNormEnv  # noqa: F401
